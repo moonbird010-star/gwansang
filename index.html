@@ -2,26 +2,50 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>내가 왕이 될 상인가?</title>
-<!-- 터널 주소가 바뀌면 아래 두 곳(meta, TARGET)의 주소만 고친다 -->
-<meta http-equiv="refresh" content="0; url=https://minerals-continuous-subsidiary-tables.trycloudflare.com/">
+<meta name="theme-color" content="#1f4fa3">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
 <style>
-  body { margin: 0; min-height: 100vh; display: grid; place-items: center;
-         font-family: system-ui, "Malgun Gothic", sans-serif; background: #f7f5ef; color: #1f2a44; }
-  main { text-align: center; padding: 24px 16px; }
-  a { color: #1f4e9c; font-weight: 600; }
+  html, body { margin: 0; height: 100%; background: #f3f6fa; color: #14203a;
+               font-family: system-ui, "Malgun Gothic", sans-serif; }
+  #app { position: fixed; inset: 0; width: 100%; height: 100%; border: 0; }
+  #wait { position: fixed; inset: 0; display: grid; place-items: center; text-align: center; padding: 16px; }
+  #wait img { width: 96px; height: 96px; border-radius: 22px; }
+  a { color: #1f4fa3; font-weight: 600; }
 </style>
 </head>
 <body>
-<main>
-  <h1>내가 왕이 될 상인가?</h1>
-  <p>관상 체험 페이지로 이동하고 있어요…</p>
-  <p>자동으로 넘어가지 않으면 <a id="go" href="https://minerals-continuous-subsidiary-tables.trycloudflare.com/">여기를 눌러 주세요</a>.</p>
-</main>
+<div id="wait">
+  <div>
+    <img src="icon-192.png" alt="">
+    <h1>내가 왕이 될 상인가?</h1>
+    <p>관상 화면을 불러오고 있어요…</p>
+    <p id="help" hidden>화면이 열리지 않으면 체험 서버가 꺼져 있는 거예요.<br>
+      잠시 뒤에 다시 열거나 <a id="direct" href="#">브라우저에서 열기</a>를 눌러 주세요.</p>
+  </div>
+</div>
 <script>
+  // 터널 주소가 바뀌면 이 한 줄만 고쳐 다시 올린다
   var TARGET = "https://minerals-continuous-subsidiary-tables.trycloudflare.com/";
-  location.replace(TARGET);
+
+  var frame = document.createElement("iframe");
+  frame.id = "app";
+  frame.src = TARGET;
+  frame.allow = "camera; microphone; clipboard-write; fullscreen";
+  frame.title = "내가 왕이 될 상인가?";
+  frame.style.visibility = "hidden";
+  frame.onload = function () { frame.style.visibility = "visible"; };
+  document.body.appendChild(frame);
+
+  document.getElementById("direct").href = TARGET;
+  setTimeout(function () {
+    if (frame.style.visibility === "hidden") document.getElementById("help").hidden = false;
+  }, 8000);
+
+  if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js");
 </script>
 </body>
 </html>
